@@ -87,7 +87,7 @@ def handle_userinput(user_question):
 
 def main():
     load_dotenv()
-    st.set_page_config(page_title="IntelLibro", page_icon=":books:")
+    st.set_page_config(page_title="IntelLibro", page_icon="icon.png")
     st.write(css, unsafe_allow_html=True)
 
     if "conversation" not in st.session_state:
@@ -108,6 +108,7 @@ def main():
         # else:
         #     st.error("⚠️ Please provide your API key.")
         #     st.markdown("No API Key? Get yours [here!](https://openai.com/blog/api-no-waitlist/)", unsafe_allow_html=True)
+        st.markdown("To know more about IntelLibro. Visit our website [here!](https://platform.openai.com/api-keys)", unsafe_allow_html=True)
 
         st.subheader("📤 UPLOAD YOUR DOCUMENTS")
         # if not api_key:
