@@ -1,9 +1,8 @@
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings
+from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
-from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from styles import css, bot_template, user_template
@@ -60,7 +59,7 @@ def get_conversation_chain(vectorstore):
         # Ensure the API key is available in the session state
         # if 'api_key' in st.session_state and st.session_state.api_key:
             # Pass the API key directly to ChatOpenAI
-            llm = ChatOpenAI(repo_id='tiiuae/falcon-7b-instruct', model_kwargs={"temperature": 0.5})
+            llm = HuggingFaceHub(repo_id='tiiuae/falcon-7b-instruct', model_kwargs={"temperature": 0.5})
             memory = ConversationBufferMemory(
                 memory_key='chat_history', return_messages=True)
             conversation_chain = ConversationalRetrievalChain.from_llm(
