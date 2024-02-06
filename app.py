@@ -32,33 +32,18 @@ def get_text_chunks(text):
 
 def get_vectorstore(text_chunks):
     try:
-        # Ensure the API key is available in the session state
-        # if 'api_key' in st.session_state and st.session_state.api_key:
-            # Pass the API key directly to OpenAIEmbeddings
-            # embeddings = OpenAIEmbeddings(openai_api_key=st.session_state.api_key)
         embeddings = OpenAIEmbeddings()
         vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
         return vectorstore
-        # else:
-            # Handle the case where the API key is not provided
-            # st.error("⚠️ Please provide your API key.")
-            # return None
+
     except IndexError:
         #Error message if PDF contain image.
         error_message = "An error occurred while processing your documents. Please consider reading and following the Developers' note above and try again."
         st.error(error_message)
         return None
-    # except Exception:
-    #     # Error message if API Key is incorrect.
-    #     error_message = "An error occurred. Please check your API key and try again."
-    #     st.error(error_message)
-    #     return None
 
 def get_conversation_chain(vectorstore):
     try:
-        # Ensure the API key is available in the session state
-        # if 'api_key' in st.session_state and st.session_state.api_key:
-            # Pass the API key directly to ChatOpenAI
             llm = HuggingFaceHub(repo_id='tiiuae/falcon-7b-instruct', model_kwargs={"temperature": 0.5})
             memory = ConversationBufferMemory(
                 memory_key='chat_history', return_messages=True)
@@ -68,10 +53,6 @@ def get_conversation_chain(vectorstore):
                 memory=memory
             )
             return conversation_chain
-        # else:
-        #     # Handle the case where the API key is not provided
-        #     st.error("⚠️ Please provide your API key.")
-        #     return None
     except AttributeError:  # If there is an error in the retriever, don't print an error message.
         return None
 
@@ -105,23 +86,9 @@ def main():
 
     with st.sidebar:
         st.header("IntelLibro :book: :books:")
-        # api_key = st.text_input("Enter your OpenAI API key.👇", type="password")
-        # # Access and store API key
-        # if api_key:
-        #     st.session_state.api_key = api_key
-        # else:
-        #     st.error("⚠️ Please provide your API key.")
-        #     st.markdown("No API Key? Get yours [here!](https://openai.com/blog/api-no-waitlist/)", unsafe_allow_html=True)
         st.markdown("To know more about IntelLibro. Visit our website [here!](https://intellibro.netlify.app/)", unsafe_allow_html=True)
 
         st.subheader("📤 UPLOAD YOUR DOCUMENTS")
-        # if not api_key:
-        # pdf_docs = st.file_uploader("⚠️ Document/s must be in PDF format.\n\n✔️ Please submit text-based PDFs.\n\n❌ Scanned images of text are not supported.", disabled=True, type=["pdf"], accept_multiple_files=True)
-        #Disable Upload Button if no File/s selected
-        # if pdf_docs is None or len(pdf_docs) == 0:
-        #     st.button("UPLOAD", disabled=True)
-
-        # else:
         pdf_docs = st.file_uploader("⚠️ Document/s must be in PDF format.\n\n✔️ Please submit text-based PDFs.\n\n❌ Scanned images of text are not supported.", type=["pdf"], accept_multiple_files=True)
         #Disable Upload Button if no File/s selected
         if pdf_docs is None or len(pdf_docs) == 0:
